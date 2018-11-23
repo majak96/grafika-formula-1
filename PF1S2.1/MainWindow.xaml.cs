@@ -1,7 +1,9 @@
 ﻿using SharpGL.SceneGraph;
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -30,7 +32,7 @@ namespace PF1S2._1
             //kreiranje OpenGL sveta
             try
             {
-                m_world = new World();
+                m_world = new World(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "3D Models\\Duck"), "duck.dae", (int)openGLControl.Width, (int)openGLControl.Height, openGLControl.OpenGL);
             }
             catch (Exception)
             {

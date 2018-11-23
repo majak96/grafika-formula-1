@@ -12,10 +12,18 @@ namespace PF1S2._1
     {
         #region Atributi i Properties
 
+        private AssimpScene m_scene;
+
         private float m_xRotation = 0.0f;
         private float m_yRotation = 0.0f;
         private int m_width = 0;
         private int m_height = 0;
+
+        public AssimpScene Scene
+        {
+            get { return m_scene; }
+            set { m_scene = value; }
+        }
 
         public int Width
         {
@@ -42,17 +50,24 @@ namespace PF1S2._1
         }
         #endregion
 
-        public World()
+        public World(String scenePath, String sceneFileName, int width, int height, OpenGL gl)
         {
-
+            this.m_scene = new AssimpScene(scenePath, sceneFileName, gl);
+            this.m_width = width;
+            this.m_height = height;
         }
 
         public void Initialize(OpenGL gl)
         {
             gl.ClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
+            gl.ShadeModel(OpenGL.GL_FLAT);
+
             gl.Enable(OpenGL.GL_DEPTH_TEST); //testiranje dubine
             gl.Enable(OpenGL.GL_CULL_FACE); //sakrivanje nevidljivih povrsina
+
+            m_scene.LoadScene();
+            m_scene.Initialize();
 
         }
 
@@ -67,7 +82,7 @@ namespace PF1S2._1
             gl.LoadIdentity();
 
             //projekcija u perspektivi sa fov=50, near=1, far=20000
-            gl.Perspective(50, (float)m_width / m_height, 1, 20000);
+            gl.Perspective(50f, (float)m_width / m_height, 1f, 20000f);
 
             gl.MatrixMode(OpenGL.GL_MODELVIEW);
             gl.LoadIdentity();
@@ -134,6 +149,11 @@ namespace PF1S2._1
             Cube cube2 = new Cube();
             cube2.Render(gl, SharpGL.SceneGraph.Core.RenderMode.Render);
             gl.PopMatrix();
+
+            //gl.PushMatrix();
+            //gl.Translate(0.0f, 0.0f, -600f);
+            //m_scene.Draw();
+            //gl.PopMatrix();
 
             //gl.PushMatrix();
             //2D tekst cyan bojom u donjem desnom uglu

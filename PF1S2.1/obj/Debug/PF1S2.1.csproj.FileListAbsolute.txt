@@ -17,3 +17,4 @@ C:\Users\Marijana Kolosnjaji\source\repos\PF1S2.1\PF1S2.1\obj\Debug\PF1S2.1.cspr
 C:\Users\Marijana Kolosnjaji\source\repos\PF1S2.1\PF1S2.1\obj\Debug\PF1S2.1.csproj.CopyComplete
 C:\Users\Marijana Kolosnjaji\source\repos\PF1S2.1\PF1S2.1\obj\Debug\PF1S2.1.exe
 C:\Users\Marijana Kolosnjaji\source\repos\PF1S2.1\PF1S2.1\obj\Debug\PF1S2.1.pdb
+C:\Users\Marijana Kolosnjaji\source\repos\PF1S2.1\PF1S2.1\bin\Debug\AssimpNet.dll
