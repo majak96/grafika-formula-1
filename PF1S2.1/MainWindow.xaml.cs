@@ -32,7 +32,7 @@ namespace PF1S2._1
             //kreiranje OpenGL sveta
             try
             {
-                m_world = new World(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "3D Models\\Duck"), "duck.dae", (int)openGLControl.Width, (int)openGLControl.Height, openGLControl.OpenGL);
+                m_world = new World(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "3D Models\\Formula"), "Formula1.3DS", "Formula2.obj", (int)openGLControl.Width, (int)openGLControl.Height, openGLControl.OpenGL);
             }
             catch (Exception)
             {
