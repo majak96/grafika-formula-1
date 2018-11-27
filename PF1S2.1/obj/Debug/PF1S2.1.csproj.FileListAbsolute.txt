@@ -1,3 +1,9 @@
+C:\Users\Marijana Kolosnjaji\source\repos\PF1S2.1\PF1S2.1\bin\Debug\3D Models\Formula\Formula1.3DS
+C:\Users\Marijana Kolosnjaji\source\repos\PF1S2.1\PF1S2.1\bin\Debug\3D Models\Formula\Formula2.obj
+C:\Users\Marijana Kolosnjaji\source\repos\PF1S2.1\PF1S2.1\bin\Debug\3D Models\Formula\Formula3.obj
+C:\Users\Marijana Kolosnjaji\source\repos\PF1S2.1\PF1S2.1\bin\Debug\Assimp32.dll
+C:\Users\Marijana Kolosnjaji\source\repos\PF1S2.1\PF1S2.1\bin\Debug\Assimp64.dll
+C:\Users\Marijana Kolosnjaji\source\repos\PF1S2.1\PF1S2.1\bin\Debug\AssimpNet.dll
 C:\Users\Marijana Kolosnjaji\source\repos\PF1S2.1\PF1S2.1\bin\Debug\PF1S2.1.exe.config
 C:\Users\Marijana Kolosnjaji\source\repos\PF1S2.1\PF1S2.1\bin\Debug\PF1S2.1.exe
 C:\Users\Marijana Kolosnjaji\source\repos\PF1S2.1\PF1S2.1\bin\Debug\PF1S2.1.pdb
@@ -7,6 +13,7 @@ C:\Users\Marijana Kolosnjaji\source\repos\PF1S2.1\PF1S2.1\bin\Debug\SharpGL.WPF.
 C:\Users\Marijana Kolosnjaji\source\repos\PF1S2.1\PF1S2.1\obj\Debug\PF1S2.1.csprojAssemblyReference.cache
 C:\Users\Marijana Kolosnjaji\source\repos\PF1S2.1\PF1S2.1\obj\Debug\MainWindow.g.cs
 C:\Users\Marijana Kolosnjaji\source\repos\PF1S2.1\PF1S2.1\obj\Debug\App.g.cs
+C:\Users\Marijana Kolosnjaji\source\repos\PF1S2.1\PF1S2.1\obj\Debug\PF1S2.1_Content.g.cs
 C:\Users\Marijana Kolosnjaji\source\repos\PF1S2.1\PF1S2.1\obj\Debug\PF1S2.1_MarkupCompile.cache
 C:\Users\Marijana Kolosnjaji\source\repos\PF1S2.1\PF1S2.1\obj\Debug\PF1S2.1_MarkupCompile.lref
 C:\Users\Marijana Kolosnjaji\source\repos\PF1S2.1\PF1S2.1\obj\Debug\MainWindow.baml
@@ -17,4 +24,3 @@ C:\Users\Marijana Kolosnjaji\source\repos\PF1S2.1\PF1S2.1\obj\Debug\PF1S2.1.cspr
 C:\Users\Marijana Kolosnjaji\source\repos\PF1S2.1\PF1S2.1\obj\Debug\PF1S2.1.csproj.CopyComplete
 C:\Users\Marijana Kolosnjaji\source\repos\PF1S2.1\PF1S2.1\obj\Debug\PF1S2.1.exe
 C:\Users\Marijana Kolosnjaji\source\repos\PF1S2.1\PF1S2.1\obj\Debug\PF1S2.1.pdb
-C:\Users\Marijana Kolosnjaji\source\repos\PF1S2.1\PF1S2.1\bin\Debug\AssimpNet.dll

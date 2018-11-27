@@ -192,7 +192,7 @@
                                 {
                                     // Permutacija boje poligona u zavisnosti od parnosti indeksa
                                     if (vertexIndex % 2 == 0)
-                                        gl.Color(0.3f, 0.3f, 0.3f);
+                                        gl.Color(0.35f, 0.35f, 0.35f);
                                     else
                                         gl.Color(0.4f, 0.4f, 0.4f);
                                 }
