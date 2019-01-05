@@ -61,10 +61,13 @@ namespace PF1S2._1
         {
             switch (e.Key)
             {
-                case Key.W: m_world.RotationX -= 2.0f; break;
-                case Key.S: m_world.RotationX += 2.0f; break;
-                case Key.A: m_world.RotationY -= 2.0f; break;
-                case Key.D: m_world.RotationY += 2.0f; break;
+                case Key.I: m_world.RotationX -= 5.0f; break;
+                case Key.K: m_world.RotationX += 5.0f; break;
+                case Key.J: m_world.RotationY -= 5.0f; break;
+                case Key.L: m_world.RotationY += 5.0f; break;
+                case Key.Q: m_world.CenterZoom -= 2.0f; break;
+                case Key.A: m_world.CenterZoom += 2.0f; break;
+                case Key.F4: Application.Current.Shutdown(); break;
             }
         }
     }
