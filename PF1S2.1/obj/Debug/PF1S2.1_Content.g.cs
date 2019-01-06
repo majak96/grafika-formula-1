@@ -8,9 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("3d%20models/formula/formula1.3ds")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("3d%20models/formula/formula2.obj")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("3d%20models/formula/formula3.obj")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("assimp32.dll")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("assimp64.dll")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("assimpnet.dll")]

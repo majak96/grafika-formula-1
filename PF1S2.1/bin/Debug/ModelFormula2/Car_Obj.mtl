@@ -1,0 +1,126 @@
+newmtl blinn2SG
+illum 4
+Kd 0.55 0.55 0.55
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.56 0.56 0.56
+newmtl blinn4SG
+illum 4
+Kd 0.05 0.05 0.05
+Ka 0.00 0.00 0.00
+Tf 0.00 0.00 0.00
+Ni 1.00
+Ks 0.42 0.42 0.42
+newmtl blinn5SG
+illum 4
+Kd 0.91 0.91 0.91
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.25 0.25 0.25
+newmtl blinn6SG
+illum 4
+Kd 0.07 0.07 0.07
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.56 0.56 0.56
+newmtl blinn7SG
+illum 4
+Kd 0.05 0.05 0.05
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.42 0.42 0.42
+newmtl blinn8SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 0.61 0.61 0.61
+Ni 1.00
+Ks 0.27 0.27 0.27
+newmtl blinn9SG
+illum 4
+Kd 0.65 0.57 0.36
+Ka 0.00 0.00 0.00
+Tf 0.71 0.71 0.71
+Ni 1.00
+Ks 0.00 0.00 0.00
+newmtl blinn10SG
+illum 4
+Kd 0.05 0.05 0.05
+Ka 0.00 0.00 0.00
+Tf 0.00 0.00 0.00
+Ni 1.00
+Ks 0.42 0.42 0.42
+newmtl blinn11SG
+illum 4
+Kd 0.49 0.49 0.49
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.25 0.25 0.25
+newmtl blinn12SG
+illum 4
+Kd 0.10 0.10 0.10
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.25 0.25 0.25
+newmtl blinn13SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd tyre_tread_texture_01.jpg
+bump tyre_tread_bmp_01.jpg
+Ni 1.00
+Ks 0.32 0.32 0.32
+newmtl lambert3SG
+illum 4
+Kd 0.01 0.36 1.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.57 0.57 0.57
+newmtl lambert4SG
+illum 4
+Kd 0.09 0.09 0.09
+Ka 0.00 0.00 0.00
+Tf 0.71 0.71 0.71
+Ni 1.00
+Ks 0.21 0.21 0.21
+newmtl lambert5SG
+illum 4
+Kd 0.34 0.34 0.34
+Ka 0.18 0.18 0.18
+Tf 1.00 1.00 1.00
+Ni 1.00
+newmtl surfaceShader1SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+newmtl surfaceShader2SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd Bugatti-Sold-Its-Last-Veyron-16.4-15.jpg
+Ni 1.00
+newmtl surfaceShader3SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd BUG_pur_sang_07.jpg
+Ni 1.00
+newmtl surfaceShader4SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd og_bugatti.jpg
+Ni 1.00

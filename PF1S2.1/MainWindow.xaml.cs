@@ -32,7 +32,9 @@ namespace PF1S2._1
             //kreiranje OpenGL sveta
             try
             {
-                m_world = new World(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "3D Models\\Formula"), "Formula1.3DS", "Formula2.obj", (int)openGLControl.Width, (int)openGLControl.Height, openGLControl.OpenGL);
+                m_world = new World(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "ModelFormula1"),
+                                    System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "ModelFormula2"),
+                                    "rio.obj", "Car_Obj.obj", (int)openGLControl.Width, (int)openGLControl.Height, openGLControl.OpenGL);
             }
             catch (Exception)
             {
@@ -61,13 +63,43 @@ namespace PF1S2._1
         {
             switch (e.Key)
             {
-                case Key.I: m_world.RotationX -= 5.0f; break;
-                case Key.K: m_world.RotationX += 5.0f; break;
+                case Key.I:
+                    if (m_world.RotationX >= 0.0f) //da se nikada ne vidi donja strana
+                        m_world.RotationX -= 5.0f;
+                    break;
+                case Key.K:
+                    if(m_world.RotationX <= 90.0f) //da se nikada ne vidi donja strana
+                        m_world.RotationX += 5.0f;
+                    break;
                 case Key.J: m_world.RotationY -= 5.0f; break;
                 case Key.L: m_world.RotationY += 5.0f; break;
                 case Key.Q: m_world.CenterZoom -= 2.0f; break;
                 case Key.A: m_world.CenterZoom += 2.0f; break;
                 case Key.F4: Application.Current.Shutdown(); break;
+            }
+        }
+
+        private void ColorSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            m_world.AmbientRed = (float)slColorR.Value;
+            m_world.AmbientGreen = (float)slColorG.Value;
+            m_world.AmbientBlue = (float)slColorB.Value;
+
+        }
+
+        private void TranslationSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (m_world != null)
+            {
+                m_world.RightTranslate = (float)translate.Value;
+            }
+        }
+
+        private void RotationSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (m_world != null)
+            {
+                m_world.LeftRotate = (float)rotate.Value;
             }
         }
     }

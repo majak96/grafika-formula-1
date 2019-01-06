@@ -1,10 +1,14 @@
 ﻿using SharpGL;
 using SharpGL.SceneGraph.Primitives;
 using System;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Reflection;
+using AssimpSample;
 
 namespace PF1S2._1
 {
@@ -20,6 +24,18 @@ namespace PF1S2._1
         private int m_width = 0;
         private int m_height = 0;
         private float m_centerZoom = 0.0f;
+
+        private float m_ambientBlue = 0.0f;
+        private float m_ambientRed = 0.0f;
+        private float m_ambientGreen = 0.0f;
+
+        private float m_rightTranslate = 2.2f;
+        private float m_leftRotate = 270.0f;
+
+        private enum Textures { Asphalt = 0, Metal = 1, Gravel = 2 };
+        private uint[] m_textures = null;
+        private string[] m_textureImages = { "..//..//Textures//asfalt.jpg", "..//..//Textures//metal.jpg", "..//..//Textures//gravel.jpg" };
+        private int m_textureCount = Enum.GetNames(typeof(Textures)).Length;
 
         public AssimpScene Scene1
         {
@@ -64,12 +80,44 @@ namespace PF1S2._1
         }
         #endregion
 
-        public World(String scenePath, String sceneFileName1, String sceneFileName2, int width, int height, OpenGL gl)
+        public float AmbientRed
         {
-            this.m_scene1 = new AssimpScene(scenePath, sceneFileName1, gl);
-            this.m_scene2 = new AssimpScene(scenePath, sceneFileName2, gl);
+            get { return m_ambientRed; }
+            set { m_ambientRed = value; }
+        }
+
+        public float AmbientGreen
+        {
+            get { return m_ambientGreen; }
+            set { m_ambientGreen = value; }
+        }
+
+        public float AmbientBlue
+        {
+            get { return m_ambientBlue; }
+            set { m_ambientBlue = value; }
+        }
+
+        public float RightTranslate
+        {
+            get { return m_rightTranslate; }
+            set { m_rightTranslate = value; }
+        }
+
+        public float LeftRotate
+        {
+            get { return m_leftRotate; }
+            set { m_leftRotate = value; }
+        }
+
+        public World(String scenePath1, String scenePath2, String sceneFileName1, String sceneFileName2, int width, int height, OpenGL gl)
+        {
+            this.m_scene1 = new AssimpScene(scenePath1, sceneFileName1, gl);
+            this.m_scene2 = new AssimpScene(scenePath2, sceneFileName2, gl);
             this.m_width = width;
             this.m_height = height;
+
+            m_textures = new uint[m_textureCount];
         }
 
         public void Initialize(OpenGL gl)
@@ -83,12 +131,19 @@ namespace PF1S2._1
 
             SetupLightning(gl); //podesavanje svetla
 
+            SetupTexture(gl); //podesavanje teksture
+
             m_scene1.LoadScene();
             m_scene1.Initialize();
+
+            gl.Enable(OpenGL.GL_TEXTURE_3D);
+            gl.TexEnv(OpenGL.GL_TEXTURE_ENV, OpenGL.GL_TEXTURE_ENV_MODE, OpenGL.GL_MODULATE); //način stapanja teksture sa materijalom
 
             m_scene2.LoadScene();
             m_scene2.Initialize();
 
+            gl.TexEnv(OpenGL.GL_TEXTURE_ENV, OpenGL.GL_TEXTURE_ENV_MODE, OpenGL.GL_DECAL); //način stapanja teksture sa materijalom
+            gl.Disable(OpenGL.GL_TEXTURE_3D);
 
         }
 
@@ -108,9 +163,234 @@ namespace PF1S2._1
             gl.MatrixMode(OpenGL.GL_MODELVIEW);
 
             gl.LoadIdentity();
+        }      
+
+        public void Draw(OpenGL gl)
+        {
+            gl.Clear(OpenGL.GL_COLOR_BUFFER_BIT | OpenGL.GL_DEPTH_BUFFER_BIT);
+
+            ChangeAmbientLightning(gl);
+
+            gl.LoadIdentity();
+
+            //pozicioniranje kamere - da gleda na scenu spreda i odgore
+            gl.LookAt(0.0f, 7.0f, m_centerZoom, 0.0f, 0.0f, -26.0f, 0.0f, 1.0f, 0.0f);
+            //gl.PushMatrix();
+
+            gl.Translate(0.0f, 0.0f, -11.0f);
+            //gl.Rotate(-1.0f, 0.0f, 0.0f);
+
+            gl.Rotate(m_xRotation, 1.0f, 0.0f, 0.0f);
+            gl.Rotate(m_yRotation, 0.0f, 1.0f, 0.0f);
+
+            DrawPodloga(gl);
+
+            DrawStaza(gl);
+
+            DrawLinija(gl);
+
+            DrawOgrade(gl);
+         
+            DrawFormula1(gl);
+
+            DrawFormula2(gl);
+
+            DrawText(gl);
+
+            gl.Flush();
         }
 
+        public void DrawPodloga(OpenGL gl)
+        {
+            //gl.Scale(1.0f, 1.0f, 2.0f);
 
+            gl.Enable(OpenGL.GL_TEXTURE_2D);
+            gl.BindTexture(OpenGL.GL_TEXTURE_2D, m_textures[(int)Textures.Gravel]); //tekstura sljunka
+
+            gl.MatrixMode(OpenGL.GL_TEXTURE); //skaliranje pomocu Texture matrice
+
+            gl.LoadIdentity();
+            gl.Scale(3f, 3f, 3f);
+
+            gl.MatrixMode(OpenGL.GL_MODELVIEW);
+
+            gl.Begin(OpenGL.GL_QUADS);
+            //gl.Color(0.36f, 0.25f, 0.20f); //braon podloga
+
+            gl.Normal(0.0f, 0.1f, 0.0f); //normala
+
+            gl.TexCoord(0.0f, 0.0f);
+            gl.Vertex(-10.0f, 0.0f, 0.0f);
+            gl.TexCoord(0.0f, 10.0f);
+            gl.Vertex(10.0f, 0.0f, 0.0f);
+            gl.TexCoord(10.0f, 10.0f);
+            gl.Vertex(10.0f, 0.0f, -30.0f);
+            gl.TexCoord(10.0f, 0.0f);
+            gl.Vertex(-10.0f, 0.0f, -30.0f);
+
+            gl.End();
+
+            gl.Disable(OpenGL.GL_TEXTURE_2D);
+        }
+
+        public void DrawStaza(OpenGL gl)
+        {
+            gl.Translate(0.0f, 0.01f, 0.0f); //staza je malo iznad podloge
+
+            gl.Enable(OpenGL.GL_TEXTURE_2D);
+
+            gl.BindTexture(OpenGL.GL_TEXTURE_2D, m_textures[(int)Textures.Asphalt]); //tekstura asfalta
+
+            gl.Begin(OpenGL.GL_QUADS);
+            gl.Color(0.0f, 0.0f, 0.0f);
+
+            gl.Normal(0.0f, 0.1f, 0.0f); //normala
+
+            gl.TexCoord(0.0f, 0.0f);
+            gl.Vertex(-5.0f, 0.0f, 0.0f);
+            gl.TexCoord(0.0f, 4.0f);
+            gl.Vertex(5.0f, 0.0f, 0.0f);
+            gl.TexCoord(4.0f, 4.0f);
+            gl.Vertex(5.0f, 0.0f, -30.0f);
+            gl.TexCoord(4.0f, 0.0f);
+            gl.Vertex(-5.0f, 0.0f, -30.0f);
+
+            gl.End();
+
+            gl.Disable(OpenGL.GL_TEXTURE_2D);
+        }
+
+        public void DrawLinija(OpenGL gl)
+        {
+            gl.Translate(0.0f, 0.01f, 0.0f); //linija je malo iznad staze
+
+            gl.Begin(OpenGL.GL_QUADS);
+            gl.Color(1.0f, 1.0f, 1.0f); //bela linija
+
+            gl.Normal(0.0f, 0.1f, 0.0f); //normala
+
+            gl.Vertex(-0.10f, 0.0f, 0.0f);
+            gl.Vertex(0.10f, 0.0f, 0.0f);
+            gl.Vertex(0.10f, 0.0f, -30.0f);
+            gl.Vertex(-0.10f, 0.0f, -30.0f);
+
+            gl.End();
+        }
+
+        public void DrawOgrade(OpenGL gl)
+        {
+            gl.Enable(OpenGL.GL_TEXTURE_2D);
+
+            gl.BindTexture(OpenGL.GL_TEXTURE_2D, m_textures[(int)Textures.Metal]); //tekstura metalne zastitne ograde
+
+            //leva ograda
+            gl.PushMatrix();
+            gl.Color(0.55f, 0.13f, 0.13f); //crvena kocka
+            gl.Translate(-6f, 0.5f, -15.0f);
+            gl.Scale(0.10f, 0.5f, 15.0f);
+
+            Cube cube1 = new Cube();
+            cube1.Render(gl, SharpGL.SceneGraph.Core.RenderMode.Render);
+
+            gl.PopMatrix();
+
+            //desna ograda
+            gl.PushMatrix();
+            gl.Color(0.55f, 0.13f, 0.13f); //crvena kocka
+            gl.Translate(6f, 0.5f, -15.0f);
+            gl.Scale(0.10f, 0.5f, 15.0f);
+
+            Cube cube2 = new Cube();
+            cube2.Render(gl, SharpGL.SceneGraph.Core.RenderMode.Render);
+
+            gl.PopMatrix();
+
+            gl.Disable(OpenGL.GL_TEXTURE_2D);
+        }
+
+        public void DrawFormula1(OpenGL gl)
+        {
+            //desna formula
+            gl.PushMatrix();
+            gl.Translate(m_rightTranslate, -0.1f, -3.6f);
+            gl.Scale(0.037f, 0.037f, 0.040f);
+            //gl.Rotate(0.0f, 0.0f, 0.0f);
+
+            m_scene1.Draw();
+
+            gl.PopMatrix();
+        }
+
+        public void DrawFormula2(OpenGL gl)
+        {
+
+            //leva formula
+            gl.PushMatrix();
+            gl.Translate(-2.2f, 0.1f, -3.6f);
+            gl.Rotate(0.0f, m_leftRotate, 0.0f);
+            gl.Scale(0.015f, 0.015f, 0.015f);
+          
+            m_scene2.Draw();
+
+            gl.PopMatrix();
+          
+        }
+
+        public void DrawText(OpenGL gl)
+        {
+            //2D tekst cyan bojom u donjem desnom uglu
+            //font je arial, 14pt, underline
+            gl.Viewport(m_width * 2 / 3, 0, m_width / 3, m_height / 3);
+
+            gl.DrawText(m_width - 700, 330, 0.0f, 1.0f, 1.0f, "Arial", 14, "Predmet: Racunarska grafika");
+            gl.DrawText(m_width - 700, 320, 0.0f, 1.0f, 1.0f, "Arial", 14, "_______________________");
+            gl.DrawText(m_width - 700, 260, 0.0f, 1.0f, 1.0f, "Arial", 14, "Sk.god: 2018/19.");
+            gl.DrawText(m_width - 700, 250, 0.0f, 1.0f, 1.0f, "Arial", 14, "______________");
+            gl.DrawText(m_width - 700, 190, 0.0f, 1.0f, 1.0f, "Arial", 14, "Ime: Marijana");
+            gl.DrawText(m_width - 700, 180, 0.0f, 1.0f, 1.0f, "Arial", 14, "___________");
+            gl.DrawText(m_width - 700, 120, 0.0f, 1.0f, 1.0f, "Arial", 14, "Prezime: Kolosnjaji");
+            gl.DrawText(m_width - 700, 110, 0.0f, 1.0f, 1.0f, "Arial", 14, "_______________");
+            gl.DrawText(m_width - 700, 50, 0.0f, 1.0f, 1.0f, "Arial", 14, "Sifra zad: 2.1");
+            gl.DrawText(m_width - 700, 40, 0.0f, 1.0f, 1.0f, "Arial", 14, "___________");
+
+            gl.Viewport(0, 0, m_width, m_height);
+        }
+
+        /*SETTING UP TEXTURE*/
+        public void SetupTexture(OpenGL gl)
+        {
+            gl.Enable(OpenGL.GL_TEXTURE_2D);
+
+            gl.TexEnv(OpenGL.GL_TEXTURE_ENV, OpenGL.GL_TEXTURE_ENV_MODE, OpenGL.GL_DECAL); //način stapanja teksture sa materijalom
+
+            gl.GenTextures(m_textureCount, m_textures);
+            for (int i = 0; i < m_textureCount; ++i)
+            {
+                gl.BindTexture(OpenGL.GL_TEXTURE_2D, m_textures[i]);
+
+                Bitmap image = new Bitmap(m_textureImages[i]);
+                image.RotateFlip(RotateFlipType.RotateNoneFlipY);
+
+                Rectangle rect = new Rectangle(0, 0, image.Width, image.Height);
+                BitmapData bitmapdata = image.LockBits(rect, System.Drawing.Imaging.ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+
+                gl.Build2DMipmaps(OpenGL.GL_TEXTURE_2D, (int)OpenGL.GL_RGBA8, image.Width, image.Height, OpenGL.GL_BGRA, OpenGL.GL_UNSIGNED_BYTE, bitmapdata.Scan0);
+
+
+                gl.TexParameter(OpenGL.GL_TEXTURE_2D, OpenGL.GL_TEXTURE_MIN_FILTER, OpenGL.GL_LINEAR); //filteri za teksture
+                gl.TexParameter(OpenGL.GL_TEXTURE_2D, OpenGL.GL_TEXTURE_MAG_FILTER, OpenGL.GL_LINEAR); //linearno filtriranje
+
+                gl.TexParameter(OpenGL.GL_TEXTURE_2D, OpenGL.GL_TEXTURE_WRAP_S, OpenGL.GL_REPEAT); //wrapping
+                gl.TexParameter(OpenGL.GL_TEXTURE_2D, OpenGL.GL_TEXTURE_WRAP_T, OpenGL.GL_REPEAT); //po obema osama
+
+                image.UnlockBits(bitmapdata);
+                image.Dispose();
+            }
+
+            gl.Disable(OpenGL.GL_TEXTURE_2D);
+        }
+
+        /*SETTING UP LIGHTING*/ 
         public void SetupLightning(OpenGL gl)
         {
             gl.Enable(OpenGL.GL_LIGHTING);
@@ -146,7 +426,7 @@ namespace PF1S2._1
 
         public void SetupReflektorskoSvetlo(OpenGL gl)
         {
-            float[] ambientColor = { 0.1f, 0.1f, 0.1f, 1.0f };
+            float[] ambientColor = { m_ambientRed, m_ambientGreen, m_ambientBlue, 1.0f };
             float[] diffuseColor = { 1.0f, 1.0f, 1.0f, 1.0f }; //reflektorski izvor bele boje
 
             float[] direction = { 0.0f, -1.0f, 0.0f }; //smer ka dole 
@@ -160,165 +440,17 @@ namespace PF1S2._1
             gl.Enable(OpenGL.GL_LIGHT1);
 
             //iznad automobila
-            float[] lightPosition = { 0.0f, 5.0f, -15.0f, 1.0f };
-
-
+            float[] lightPosition = { 0.0f, 5.0f, -14.0f, 1.0f };
 
             gl.Light(OpenGL.GL_LIGHT1, OpenGL.GL_POSITION, lightPosition);
 
         }
 
-        public void Draw(OpenGL gl)
+        public void ChangeAmbientLightning(OpenGL gl)
         {
-            gl.Clear(OpenGL.GL_COLOR_BUFFER_BIT | OpenGL.GL_DEPTH_BUFFER_BIT);
+            float[] ambientColor = { m_ambientRed, m_ambientGreen, m_ambientBlue, 1.0f};
 
-            gl.LoadIdentity();
-
-            //pozicioniranje kamere - da gleda na scenu spreda i odgore
-            gl.LookAt(0.0f, 7.0f, 0.0f, 0.0f, 0.0f, -26.0f, 0.0f, 1.0f, 0.0f);
-            //gl.PushMatrix();
-
-            gl.Translate(0.0f, 0.0f, m_centerZoom - 11.0f);
-            //gl.Rotate(-1.0f, 0.0f, 0.0f);
-
-            gl.Rotate(m_xRotation, 1.0f, 0.0f, 0.0f);
-            gl.Rotate(m_yRotation, 0.0f, 1.0f, 0.0f);
-
-            DrawPodloga(gl);
-
-            DrawStaza(gl);
-
-            DrawLinija(gl);
-
-            DrawOgrade(gl);
-         
-            DrawFormula1(gl);
-
-            drawFormula2(gl);
-
-            DrawText(gl);
-
-            gl.Flush();
-        }
-
-        public void DrawPodloga(OpenGL gl)
-        {
-            //gl.Scale(1.0f, 1.0f, 2.0f);
-
-            gl.Begin(OpenGL.GL_QUADS);
-            gl.Color(0.36f, 0.25f, 0.20f); //braon podloga
-
-            gl.Normal(0.0f, 0.1f, 0.0f); //normala
-
-            gl.Vertex(-10.0f, 0.0f, 0.0f);
-            gl.Vertex(10.0f, 0.0f, 0.0f);
-            gl.Vertex(10.0f, 0.0f, -30.0f);
-            gl.Vertex(-10.0f, 0.0f, -30.0f);
-
-            gl.End();
-        }
-
-        public void DrawStaza(OpenGL gl)
-        {
-            gl.Translate(0.0f, 0.01f, 0.0f); //staza je malo iznad podloge
-
-            gl.Begin(OpenGL.GL_QUADS);
-            gl.Color(0.32f, 0.32f, 0.32f); //siva staza
-
-            gl.Normal(0.0f, 0.1f, 0.0f); //normala
-
-            gl.Vertex(-5.0f, 0.0f, 0.0f);
-            gl.Vertex(5.0f, 0.0f, 0.0f);
-            gl.Vertex(5.0f, 0.0f, -30.0f);
-            gl.Vertex(-5.0f, 0.0f, -30.0f);
-
-            gl.End();
-        }
-
-        public void DrawLinija(OpenGL gl)
-        {
-            gl.Translate(0.0f, 0.01f, 0.0f); //linija je malo iznad staze
-
-            gl.Begin(OpenGL.GL_QUADS);
-            gl.Color(1.0f, 1.0f, 1.0f); //bela linija
-
-            gl.Vertex(-0.10f, 0.0f, 0.0f);
-            gl.Vertex(0.10f, 0.0f, 0.0f);
-            gl.Vertex(0.10f, 0.0f, -30.0f);
-            gl.Vertex(-0.10f, 0.0f, -30.0f);
-
-            gl.End();
-        }
-
-        public void DrawOgrade(OpenGL gl)
-        {
-            //leva ograda
-            gl.PushMatrix();
-            gl.Color(0.55f, 0.13f, 0.13f); //crvena kocka
-            gl.Translate(-6f, 0.5f, -15.0f);
-            gl.Scale(0.20f, 0.5f, 15.0f);
-
-            Cube cube1 = new Cube();
-            cube1.Render(gl, SharpGL.SceneGraph.Core.RenderMode.Render);
-
-            gl.PopMatrix();
-
-            //desna ograda
-            gl.PushMatrix();
-            gl.Color(0.55f, 0.13f, 0.13f); //crvena kocka
-            gl.Translate(6f, 0.5f, -15.0f);
-            gl.Scale(0.20f, 0.5f, 15.0f);
-
-            Cube cube2 = new Cube();
-            cube2.Render(gl, SharpGL.SceneGraph.Core.RenderMode.Render);
-
-            gl.PopMatrix();
-        }
-
-        public void DrawFormula1(OpenGL gl)
-        {
-            //desna formula
-            gl.PushMatrix();
-            gl.Translate(1.2f, -0.1f, -5.0f);
-            gl.Scale(0.04f, 0.04f, 0.04f);
-            gl.Rotate(0.0f, 180.0f, 0.0f);
-
-            m_scene1.Draw();
-
-            gl.PopMatrix();
-        }
-
-        public void drawFormula2(OpenGL gl)
-        {
-            //leva formula
-            gl.PushMatrix();
-            gl.Translate(-2.5f, 0.06f, -3.8f);
-            gl.Rotate(90.0f, 180.0f, 0.0f);
-            gl.Scale(1.6f, 1.53f, 1.6f);
-
-            m_scene2.Draw();
-
-            gl.PopMatrix();
-        }
-
-        public void DrawText(OpenGL gl)
-        {
-            //2D tekst cyan bojom u donjem desnom uglu
-            //font je arial, 14pt, underline
-            gl.Viewport(m_width * 2 / 3, 0, m_width / 3, m_height / 3);
-
-            gl.DrawText(m_width - 700, 330, 0.0f, 1.0f, 1.0f, "Arial", 14, "Predmet: Racunarska grafika");
-            gl.DrawText(m_width - 700, 320, 0.0f, 1.0f, 1.0f, "Arial", 14, "_______________________");
-            gl.DrawText(m_width - 700, 260, 0.0f, 1.0f, 1.0f, "Arial", 14, "Sk.god: 2018/19.");
-            gl.DrawText(m_width - 700, 250, 0.0f, 1.0f, 1.0f, "Arial", 14, "______________");
-            gl.DrawText(m_width - 700, 190, 0.0f, 1.0f, 1.0f, "Arial", 14, "Ime: Marijana");
-            gl.DrawText(m_width - 700, 180, 0.0f, 1.0f, 1.0f, "Arial", 14, "___________");
-            gl.DrawText(m_width - 700, 120, 0.0f, 1.0f, 1.0f, "Arial", 14, "Prezime: Kolosnjaji");
-            gl.DrawText(m_width - 700, 110, 0.0f, 1.0f, 1.0f, "Arial", 14, "_______________");
-            gl.DrawText(m_width - 700, 50, 0.0f, 1.0f, 1.0f, "Arial", 14, "Sifra zad: 2.1");
-            gl.DrawText(m_width - 700, 40, 0.0f, 1.0f, 1.0f, "Arial", 14, "___________");
-
-            gl.Viewport(0, 0, m_width, m_height);
+            gl.Light(OpenGL.GL_LIGHT1, OpenGL.GL_AMBIENT, ambientColor);
         }
 
         #region Destruktori
@@ -344,34 +476,6 @@ namespace PF1S2._1
             //{
             //    //Oslobodi managed resurse
             //}
-        }
-
-        public float[] FindFaceNormal(float x1, float y1, float z1,
-                                              float x2, float y2, float z2,
-                                              float x3, float y3, float z3)
-        {
-            float[] normal = new float[3];
-
-            // Racunanje normale na ravan odredjenu sa tri tacke definisane u CCW smeru
-            normal[0] = (y1 - y2) * (z2 - z3) - (y2 - y3) * (z1 - z2);
-            normal[1] = (x2 - x3) * (z1 - z2) - (x1 - x2) * (z2 - z3);
-            normal[2] = (x1 - x2) * (y2 - y3) - (x2 - x3) * (y1 - y2);
-
-            // Duzina vektora normale
-            float len = (float)(Math.Sqrt((normal[0] * normal[0]) + (normal[1] * normal[1]) + (normal[2] * normal[2])));
-
-            // Izbegava se deljenje sa nulom
-            if (len == 0.0f)
-            {
-                len = 1.0f;
-            }
-
-            // Normalizacija vektora normale
-            normal[0] /= len;
-            normal[1] /= len;
-            normal[2] /= len;
-
-            return normal;
         }
 
         #endregion
