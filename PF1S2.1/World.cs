@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
 using AssimpSample;
+using System.Windows.Threading;
 
 namespace PF1S2._1
 {
@@ -29,8 +30,10 @@ namespace PF1S2._1
         private float m_ambientRed = 0.0f;
         private float m_ambientGreen = 0.0f;
 
-        private float m_rightTranslate = 2.2f;
-        private float m_leftRotate = 270.0f;
+        private float m_rightTranslateX = 2.2f;
+        private float m_leftRotateY = 270.0f;
+        private float m_leftTranslateZ = 11.4f;
+        private float m_rightTranslateZ = 11.4f;
 
         private enum Textures { Asphalt = 0, Metal = 1, Gravel = 2 };
         private uint[] m_textures = null;
@@ -78,7 +81,6 @@ namespace PF1S2._1
             get { return m_centerZoom; }
             set { m_centerZoom = value; }
         }
-        #endregion
 
         public float AmbientRed
         {
@@ -98,17 +100,32 @@ namespace PF1S2._1
             set { m_ambientBlue = value; }
         }
 
-        public float RightTranslate
+        public float RightTranslateX
         {
-            get { return m_rightTranslate; }
-            set { m_rightTranslate = value; }
+            get { return m_rightTranslateX; }
+            set { m_rightTranslateX = value; }
         }
 
-        public float LeftRotate
+        public float LeftTranslateZ
         {
-            get { return m_leftRotate; }
-            set { m_leftRotate = value; }
+            get { return m_leftTranslateZ; }
+            set { m_leftTranslateZ = value; }
         }
+
+        public float RightTranslateZ
+        {
+            get { return m_rightTranslateZ; }
+            set { m_rightTranslateZ = value; }
+        }
+
+        public float LeftRotateY
+        {
+            get { return m_leftRotateY; }
+            set { m_leftRotateY = value; }
+        }
+
+
+        #endregion
 
         public World(String scenePath1, String scenePath2, String sceneFileName1, String sceneFileName2, int width, int height, OpenGL gl)
         {
@@ -174,11 +191,10 @@ namespace PF1S2._1
             gl.LoadIdentity();
 
             //pozicioniranje kamere - da gleda na scenu spreda i odgore
-            gl.LookAt(0.0f, 7.0f, m_centerZoom, 0.0f, 0.0f, -26.0f, 0.0f, 1.0f, 0.0f);
+            gl.LookAt(0.0f, 7.0f, m_centerZoom + 15, 0.0f, 0.0f, -11.0f, 0.0f, 1.0f, 0.0f);
             //gl.PushMatrix();
 
             gl.Translate(0.0f, 0.0f, -11.0f);
-            //gl.Rotate(-1.0f, 0.0f, 0.0f);
 
             gl.Rotate(m_xRotation, 1.0f, 0.0f, 0.0f);
             gl.Rotate(m_yRotation, 0.0f, 1.0f, 0.0f);
@@ -220,13 +236,13 @@ namespace PF1S2._1
             gl.Normal(0.0f, 0.1f, 0.0f); //normala
 
             gl.TexCoord(0.0f, 0.0f);
-            gl.Vertex(-10.0f, 0.0f, 0.0f);
+            gl.Vertex(-10.0f, 0.0f, 15.0f);
             gl.TexCoord(0.0f, 10.0f);
-            gl.Vertex(10.0f, 0.0f, 0.0f);
+            gl.Vertex(10.0f, 0.0f, 15.0f);
             gl.TexCoord(10.0f, 10.0f);
-            gl.Vertex(10.0f, 0.0f, -30.0f);
+            gl.Vertex(10.0f, 0.0f, -35.0f);
             gl.TexCoord(10.0f, 0.0f);
-            gl.Vertex(-10.0f, 0.0f, -30.0f);
+            gl.Vertex(-10.0f, 0.0f, -35.0f);
 
             gl.End();
 
@@ -247,13 +263,13 @@ namespace PF1S2._1
             gl.Normal(0.0f, 0.1f, 0.0f); //normala
 
             gl.TexCoord(0.0f, 0.0f);
-            gl.Vertex(-5.0f, 0.0f, 0.0f);
+            gl.Vertex(-5.0f, 0.0f, 15.0f);
             gl.TexCoord(0.0f, 4.0f);
-            gl.Vertex(5.0f, 0.0f, 0.0f);
+            gl.Vertex(5.0f, 0.0f, 15.0f);
             gl.TexCoord(4.0f, 4.0f);
-            gl.Vertex(5.0f, 0.0f, -30.0f);
+            gl.Vertex(5.0f, 0.0f, -35.0f);
             gl.TexCoord(4.0f, 0.0f);
-            gl.Vertex(-5.0f, 0.0f, -30.0f);
+            gl.Vertex(-5.0f, 0.0f, -35.0f);
 
             gl.End();
 
@@ -269,10 +285,10 @@ namespace PF1S2._1
 
             gl.Normal(0.0f, 0.1f, 0.0f); //normala
 
-            gl.Vertex(-0.10f, 0.0f, 0.0f);
-            gl.Vertex(0.10f, 0.0f, 0.0f);
-            gl.Vertex(0.10f, 0.0f, -30.0f);
-            gl.Vertex(-0.10f, 0.0f, -30.0f);
+            gl.Vertex(-0.10f, 0.0f, 15.0f);
+            gl.Vertex(0.10f, 0.0f, 15.0f);
+            gl.Vertex(0.10f, 0.0f, -35.0f);
+            gl.Vertex(-0.10f, 0.0f, -35.0f);
 
             gl.End();
         }
@@ -286,8 +302,8 @@ namespace PF1S2._1
             //leva ograda
             gl.PushMatrix();
             gl.Color(0.55f, 0.13f, 0.13f); //crvena kocka
-            gl.Translate(-6f, 0.5f, -15.0f);
-            gl.Scale(0.10f, 0.5f, 15.0f);
+            gl.Translate(-6f, 0.5f, -10.0f);
+            gl.Scale(0.10f, 0.5f, 25.0f);
 
             Cube cube1 = new Cube();
             cube1.Render(gl, SharpGL.SceneGraph.Core.RenderMode.Render);
@@ -297,8 +313,8 @@ namespace PF1S2._1
             //desna ograda
             gl.PushMatrix();
             gl.Color(0.55f, 0.13f, 0.13f); //crvena kocka
-            gl.Translate(6f, 0.5f, -15.0f);
-            gl.Scale(0.10f, 0.5f, 15.0f);
+            gl.Translate(6f, 0.5f, -10.0f);
+            gl.Scale(0.10f, 0.5f, 25.0f);
 
             Cube cube2 = new Cube();
             cube2.Render(gl, SharpGL.SceneGraph.Core.RenderMode.Render);
@@ -312,7 +328,7 @@ namespace PF1S2._1
         {
             //desna formula
             gl.PushMatrix();
-            gl.Translate(m_rightTranslate, -0.1f, -3.6f);
+            gl.Translate(m_rightTranslateX, -0.1f, m_rightTranslateZ);
             gl.Scale(0.037f, 0.037f, 0.040f);
             //gl.Rotate(0.0f, 0.0f, 0.0f);
 
@@ -323,17 +339,15 @@ namespace PF1S2._1
 
         public void DrawFormula2(OpenGL gl)
         {
-
             //leva formula
             gl.PushMatrix();
-            gl.Translate(-2.2f, 0.1f, -3.6f);
-            gl.Rotate(0.0f, m_leftRotate, 0.0f);
+            gl.Translate(-2.2f, 0.1f, m_leftTranslateZ);
+            gl.Rotate(0.0f, m_leftRotateY, 0.0f);
             gl.Scale(0.015f, 0.015f, 0.015f);
           
             m_scene2.Draw();
 
-            gl.PopMatrix();
-          
+            gl.PopMatrix();         
         }
 
         public void DrawText(OpenGL gl)
@@ -355,6 +369,8 @@ namespace PF1S2._1
 
             gl.Viewport(0, 0, m_width, m_height);
         }
+
+        #region setup
 
         /*SETTING UP TEXTURE*/
         public void SetupTexture(OpenGL gl)
@@ -440,7 +456,7 @@ namespace PF1S2._1
             gl.Enable(OpenGL.GL_LIGHT1);
 
             //iznad automobila
-            float[] lightPosition = { 0.0f, 5.0f, -14.0f, 1.0f };
+            float[] lightPosition = { 0.0f, 6.0f, -14.0f, 1.0f };
 
             gl.Light(OpenGL.GL_LIGHT1, OpenGL.GL_POSITION, lightPosition);
 
@@ -452,6 +468,8 @@ namespace PF1S2._1
 
             gl.Light(OpenGL.GL_LIGHT1, OpenGL.GL_AMBIENT, ambientColor);
         }
+
+        #endregion
 
         #region Destruktori
 
