@@ -13,6 +13,8 @@ namespace PF1S2._1
         private World m_world = null;
         private DispatcherTimer leftCarTimer;
         private DispatcherTimer rightCarTimer;
+        private DispatcherTimer cameraTimer;
+
         private bool animationOn = false;
 
         public Animation(World world)
@@ -25,12 +27,12 @@ namespace PF1S2._1
         public void LeftCarAnimation(object sender, EventArgs e)
         {
             m_world.LeftTranslateZ -= 2.0f;
+            m_world.LightTranslate -= 2.0f;
             if (m_world.LeftTranslateZ <= -30.0f)
             {
                 leftCarTimer.Stop();
                 //animation = false;
             }
-
         }
 
         public void RightCarAnimation(object sender, EventArgs e)
@@ -39,19 +41,29 @@ namespace PF1S2._1
             if (m_world.RightTranslateZ <= -30.0f)
             {
                 rightCarTimer.Stop();
+                cameraTimer.Stop();
                 animationOn = false;
             }
+       
+        }
 
+        public void CameraAnimation(object sender, EventArgs e)
+        {
+            if(m_world.CameraZ > (m_world.PointZ + 10.0f))
+            {
+                m_world.CameraZ -= 2.0f;
+            }
+            else
+            {
+                m_world.CameraY += 7.0f;
+            }
         }
 
         public void StartAnimation()
         {
-            m_world.LeftTranslateZ = 11.4f;
-            m_world.RightTranslateZ = 11.4f;
-            m_world.RightTranslateX = 2.2f;
-            m_world.LeftRotateY = 270.0f;
+            m_world.RefreshScene();
 
-            animationOn = true;
+        animationOn = true;
             leftCarTimer = new DispatcherTimer();
             leftCarTimer.Interval = TimeSpan.FromMilliseconds(5);
             leftCarTimer.Tick += new EventHandler(LeftCarAnimation);
@@ -60,8 +72,13 @@ namespace PF1S2._1
             rightCarTimer.Interval = TimeSpan.FromMilliseconds(60);
             rightCarTimer.Tick += new EventHandler(RightCarAnimation);
 
+            cameraTimer = new DispatcherTimer();
+            cameraTimer.Interval = TimeSpan.FromMilliseconds(60);
+            cameraTimer.Tick += new EventHandler(CameraAnimation);
+
             leftCarTimer.Start();
             rightCarTimer.Start();
+            cameraTimer.Start();
         }
     }
 }

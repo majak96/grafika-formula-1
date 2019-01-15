@@ -69,18 +69,22 @@ namespace PF1S2._1
             {
                 switch (e.Key)
                 {
-                    case Key.I:
+                    //rotacija za 5 stepeni oko horizontalne ose (8)
+                    case Key.I: 
                         if (m_world.RotationX >= 0.0f) //da se nikada ne vidi donja strana
                             m_world.RotationX -= 5.0f;
                         break;
-                    case Key.K:
+                    case Key.K: 
                         if (m_world.RotationX <= 90.0f) //da se nikada ne vidi donja strana
                             m_world.RotationX += 5.0f;
                         break;
+                    //rotacija za 5 stepeni oko vertikalne ose (8)
                     case Key.J: m_world.RotationY -= 5.0f; break;
                     case Key.L: m_world.RotationY += 5.0f; break;
-                    case Key.Q: m_world.CenterZoom -= 2.0f; break;
-                    case Key.A: m_world.CenterZoom += 2.0f; break;
+                    //priblizavanje i udaljavanje od centra scene
+                    case Key.OemPlus: m_world.CameraZ -= 2.0f; break;
+                    case Key.OemMinus: m_world.CameraZ += 2.0f; break;
+                    //animacija (11)
                     case Key.V:
                         animation.StartAnimation(); break;
                     case Key.F4: Application.Current.Shutdown(); break;
@@ -90,7 +94,8 @@ namespace PF1S2._1
 
         private void ColorSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            if (!animation.AnimationOn)
+            //izbor boje ambijentalne komponente reflektorskog svetlosnog izvora (7)
+            if (m_world != null &&  !animation.AnimationOn)
             {
                 m_world.AmbientRed = (float)slColorR.Value;
                 m_world.AmbientGreen = (float)slColorG.Value;
@@ -101,6 +106,7 @@ namespace PF1S2._1
 
         private void TranslationSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
+            //transliranje desnog bolida po hoorizontalnoj osi (7)
             if (m_world != null && !animation.AnimationOn)
             {
                 m_world.RightTranslateX = (float)translate.Value;
@@ -109,9 +115,18 @@ namespace PF1S2._1
 
         private void RotationSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
+            //rotiranje levog bolida oko vertikalne ose (7)
             if (m_world != null && !animation.AnimationOn)
             {
                 m_world.LeftRotateY = (float)rotate.Value;
+            }
+        }
+
+        private void ButtonClick_Refresh(object sender, RoutedEventArgs e)
+        {
+            if (m_world != null && !animation.AnimationOn)
+            {
+                m_world.RefreshScene();
             }
         }
     }

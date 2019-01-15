@@ -45,6 +45,12 @@
                         <Slider Maximum="360" Minimum="0" Value="270" TickPlacement="BottomRight" TickFrequency="5.0" IsSnapToTickEnabled="True" Name="rotate" ValueChanged="RotationSlider_ValueChanged" />
                     </DockPanel>
                 </StackPanel>
+
+                <StackPanel Margin="5" VerticalAlignment="Center">
+                    <DockPanel VerticalAlignment="Center" Margin="5">
+                        <Button Click="ButtonClick_Refresh" Content="Osveži scenu"></Button>
+                    </DockPanel>
+                </StackPanel>
             </StackPanel>
             
             <sharpGL:OpenGLControl 

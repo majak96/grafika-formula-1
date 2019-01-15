@@ -24,7 +24,6 @@ namespace PF1S2._1
         private float m_yRotation = 0.0f;
         private int m_width = 0;
         private int m_height = 0;
-        private float m_centerZoom = 0.0f;
 
         private float m_ambientBlue = 0.0f;
         private float m_ambientRed = 0.0f;
@@ -34,6 +33,12 @@ namespace PF1S2._1
         private float m_leftRotateY = 270.0f;
         private float m_leftTranslateZ = 11.4f;
         private float m_rightTranslateZ = 11.4f;
+        private float m_lightTranslate = 14.0f;
+
+        private float m_cameraZ = 15.0f;
+        private float m_cameraY = 7.0f;
+        private float m_cameraX = 0.0f;
+        private float m_pointZ = -12.0f;
 
         private enum Textures { Asphalt = 0, Metal = 1, Gravel = 2 };
         private uint[] m_textures = null;
@@ -74,12 +79,6 @@ namespace PF1S2._1
         {
             get { return m_xRotation; }
             set { m_xRotation = value; }
-        }
-
-        public float CenterZoom
-        {
-            get { return m_centerZoom; }
-            set { m_centerZoom = value; }
         }
 
         public float AmbientRed
@@ -124,7 +123,34 @@ namespace PF1S2._1
             set { m_leftRotateY = value; }
         }
 
+        public float LightTranslate
+        {
+            get { return m_lightTranslate; }
+            set { m_lightTranslate = value; }
+        }
 
+        public float CameraZ
+        {
+            get { return m_cameraZ; }
+            set { m_cameraZ = value; }
+        }
+
+        public float CameraY
+        {
+            get { return m_cameraY; }
+            set { m_cameraY = value; }
+        }
+        public float CameraX
+        {
+            get { return m_cameraX; }
+            set { m_cameraX = value; }
+        }
+
+        public float PointZ
+        {
+            get { return m_pointZ; }
+            set { m_pointZ = value; }
+        }
         #endregion
 
         public World(String scenePath1, String scenePath2, String sceneFileName1, String sceneFileName2, int width, int height, OpenGL gl)
@@ -153,14 +179,8 @@ namespace PF1S2._1
             m_scene1.LoadScene();
             m_scene1.Initialize();
 
-            gl.Enable(OpenGL.GL_TEXTURE_3D);
-            gl.TexEnv(OpenGL.GL_TEXTURE_ENV, OpenGL.GL_TEXTURE_ENV_MODE, OpenGL.GL_MODULATE); //način stapanja teksture sa materijalom
-
             m_scene2.LoadScene();
             m_scene2.Initialize();
-
-            gl.TexEnv(OpenGL.GL_TEXTURE_ENV, OpenGL.GL_TEXTURE_ENV_MODE, OpenGL.GL_DECAL); //način stapanja teksture sa materijalom
-            gl.Disable(OpenGL.GL_TEXTURE_3D);
 
         }
 
@@ -186,18 +206,21 @@ namespace PF1S2._1
         {
             gl.Clear(OpenGL.GL_COLOR_BUFFER_BIT | OpenGL.GL_DEPTH_BUFFER_BIT);
 
-            ChangeAmbientLightning(gl);
+            //ChangeAmbientLightning(gl);
 
             gl.LoadIdentity();
 
-            //pozicioniranje kamere - da gleda na scenu spreda i odgore
-            gl.LookAt(0.0f, 7.0f, m_centerZoom + 15, 0.0f, 0.0f, -11.0f, 0.0f, 1.0f, 0.0f);
+            //pozicioniranje kamere - da gleda na scenu spreda i odgore (6)
+            gl.LookAt(m_cameraX, m_cameraY, m_cameraZ, 0.0f, 0.0f, m_pointZ, 0.0f, 1.0f, 0.0f);
             //gl.PushMatrix();
+            //gl.LookAt(0.0f, 60.0f, 0.0f, 0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f);
 
             gl.Translate(0.0f, 0.0f, -11.0f);
 
             gl.Rotate(m_xRotation, 1.0f, 0.0f, 0.0f);
             gl.Rotate(m_yRotation, 0.0f, 1.0f, 0.0f);
+
+            UpdateReflektorskoSvetlo(gl);
 
             DrawPodloga(gl);
 
@@ -221,19 +244,19 @@ namespace PF1S2._1
             //gl.Scale(1.0f, 1.0f, 2.0f);
 
             gl.Enable(OpenGL.GL_TEXTURE_2D);
-            gl.BindTexture(OpenGL.GL_TEXTURE_2D, m_textures[(int)Textures.Gravel]); //tekstura sljunka
+            gl.BindTexture(OpenGL.GL_TEXTURE_2D, m_textures[(int)Textures.Gravel]); //tekstura sljunka (5)
 
-            gl.MatrixMode(OpenGL.GL_TEXTURE); //skaliranje pomocu Texture matrice
+            gl.MatrixMode(OpenGL.GL_TEXTURE); //skaliranje pomocu Texture matrice (5)
 
             gl.LoadIdentity();
-            gl.Scale(3f, 3f, 3f);
+            gl.Scale(3f, 3f, 3f); 
 
             gl.MatrixMode(OpenGL.GL_MODELVIEW);
 
             gl.Begin(OpenGL.GL_QUADS);
             //gl.Color(0.36f, 0.25f, 0.20f); //braon podloga
 
-            gl.Normal(0.0f, 0.1f, 0.0f); //normala
+            gl.Normal(0.0f, 0.1f, 0.0f); //normala (2)
 
             gl.TexCoord(0.0f, 0.0f);
             gl.Vertex(-10.0f, 0.0f, 15.0f);
@@ -255,12 +278,12 @@ namespace PF1S2._1
 
             gl.Enable(OpenGL.GL_TEXTURE_2D);
 
-            gl.BindTexture(OpenGL.GL_TEXTURE_2D, m_textures[(int)Textures.Asphalt]); //tekstura asfalta
+            gl.BindTexture(OpenGL.GL_TEXTURE_2D, m_textures[(int)Textures.Asphalt]); //tekstura asfalta (4)
 
             gl.Begin(OpenGL.GL_QUADS);
             gl.Color(0.0f, 0.0f, 0.0f);
 
-            gl.Normal(0.0f, 0.1f, 0.0f); //normala
+            gl.Normal(0.0f, 0.1f, 0.0f); //normala (2)
 
             gl.TexCoord(0.0f, 0.0f);
             gl.Vertex(-5.0f, 0.0f, 15.0f);
@@ -297,7 +320,7 @@ namespace PF1S2._1
         {
             gl.Enable(OpenGL.GL_TEXTURE_2D);
 
-            gl.BindTexture(OpenGL.GL_TEXTURE_2D, m_textures[(int)Textures.Metal]); //tekstura metalne zastitne ograde
+            gl.BindTexture(OpenGL.GL_TEXTURE_2D, m_textures[(int)Textures.Metal]); //tekstura metalne zastitne ograde (4)
 
             //leva ograda
             gl.PushMatrix();
@@ -326,6 +349,9 @@ namespace PF1S2._1
 
         public void DrawFormula1(OpenGL gl)
         {
+            gl.Enable(OpenGL.GL_TEXTURE_3D);
+            gl.TexEnv(OpenGL.GL_TEXTURE_ENV, OpenGL.GL_TEXTURE_ENV_MODE, OpenGL.GL_MODULATE); //način stapanja teksture sa materijalom (10)
+            
             //desna formula
             gl.PushMatrix();
             gl.Translate(m_rightTranslateX, -0.1f, m_rightTranslateZ);
@@ -335,10 +361,16 @@ namespace PF1S2._1
             m_scene1.Draw();
 
             gl.PopMatrix();
+
+            gl.TexEnv(OpenGL.GL_TEXTURE_ENV, OpenGL.GL_TEXTURE_ENV_MODE, OpenGL.GL_DECAL); //način stapanja teksture sa materijalom
+            gl.Disable(OpenGL.GL_TEXTURE_3D);
         }
 
         public void DrawFormula2(OpenGL gl)
         {
+            gl.Enable(OpenGL.GL_TEXTURE_3D);
+            gl.TexEnv(OpenGL.GL_TEXTURE_ENV, OpenGL.GL_TEXTURE_ENV_MODE, OpenGL.GL_MODULATE); //način stapanja teksture sa materijalom (10)
+
             //leva formula
             gl.PushMatrix();
             gl.Translate(-2.2f, 0.1f, m_leftTranslateZ);
@@ -347,7 +379,10 @@ namespace PF1S2._1
           
             m_scene2.Draw();
 
-            gl.PopMatrix();         
+            gl.PopMatrix();
+
+            gl.TexEnv(OpenGL.GL_TEXTURE_ENV, OpenGL.GL_TEXTURE_ENV_MODE, OpenGL.GL_DECAL); //način stapanja teksture sa materijalom
+            gl.Disable(OpenGL.GL_TEXTURE_3D);
         }
 
         public void DrawText(OpenGL gl)
@@ -372,12 +407,27 @@ namespace PF1S2._1
 
         #region setup
 
+        public void RefreshScene()
+        {
+            LeftTranslateZ = 11.4f;
+            RightTranslateZ = 11.4f;
+            RightTranslateX = 2.2f;
+            LeftRotateY = 270.0f;
+            CameraZ = 15.0f;
+            CameraY = 7.0f;
+            CameraX = 0.0f;
+            PointZ = -12.0f;
+            m_xRotation = 0.0f;
+            m_yRotation = 0.0f;
+            m_lightTranslate = 14.0f;
+    }
+
         /*SETTING UP TEXTURE*/
         public void SetupTexture(OpenGL gl)
         {
             gl.Enable(OpenGL.GL_TEXTURE_2D);
 
-            gl.TexEnv(OpenGL.GL_TEXTURE_ENV, OpenGL.GL_TEXTURE_ENV_MODE, OpenGL.GL_DECAL); //način stapanja teksture sa materijalom
+            gl.TexEnv(OpenGL.GL_TEXTURE_ENV, OpenGL.GL_TEXTURE_ENV_MODE, OpenGL.GL_DECAL); //način stapanja teksture sa materijalom (3)
 
             gl.GenTextures(m_textureCount, m_textures);
             for (int i = 0; i < m_textureCount; ++i)
@@ -393,10 +443,10 @@ namespace PF1S2._1
                 gl.Build2DMipmaps(OpenGL.GL_TEXTURE_2D, (int)OpenGL.GL_RGBA8, image.Width, image.Height, OpenGL.GL_BGRA, OpenGL.GL_UNSIGNED_BYTE, bitmapdata.Scan0);
 
 
-                gl.TexParameter(OpenGL.GL_TEXTURE_2D, OpenGL.GL_TEXTURE_MIN_FILTER, OpenGL.GL_LINEAR); //filteri za teksture
+                gl.TexParameter(OpenGL.GL_TEXTURE_2D, OpenGL.GL_TEXTURE_MIN_FILTER, OpenGL.GL_LINEAR); //filteri za teksture (3)
                 gl.TexParameter(OpenGL.GL_TEXTURE_2D, OpenGL.GL_TEXTURE_MAG_FILTER, OpenGL.GL_LINEAR); //linearno filtriranje
 
-                gl.TexParameter(OpenGL.GL_TEXTURE_2D, OpenGL.GL_TEXTURE_WRAP_S, OpenGL.GL_REPEAT); //wrapping
+                gl.TexParameter(OpenGL.GL_TEXTURE_2D, OpenGL.GL_TEXTURE_WRAP_S, OpenGL.GL_REPEAT); //wrapping (3)
                 gl.TexParameter(OpenGL.GL_TEXTURE_2D, OpenGL.GL_TEXTURE_WRAP_T, OpenGL.GL_REPEAT); //po obema osama
 
                 image.UnlockBits(bitmapdata);
@@ -414,26 +464,26 @@ namespace PF1S2._1
             SetupTackastoSvetlo(gl);
             SetupReflektorskoSvetlo(gl);
 
-            gl.Enable(OpenGL.GL_COLOR_MATERIAL); //color tracking mehanizam
-            gl.ColorMaterial(OpenGL.GL_FRONT, OpenGL.GL_AMBIENT_AND_DIFFUSE); //ambijentalna i difuzna komponenta
+            gl.Enable(OpenGL.GL_COLOR_MATERIAL); //color tracking mehanizam (1)
+            gl.ColorMaterial(OpenGL.GL_FRONT, OpenGL.GL_AMBIENT_AND_DIFFUSE); //ambijentalna i difuzna komponenta (1)
 
-            gl.Enable(OpenGL.GL_NORMALIZE); //automatska normalizacija
+            gl.Enable(OpenGL.GL_NORMALIZE); //automatska normalizacija (2)
 
         }
         public void SetupTackastoSvetlo(OpenGL gl)
         {
             float[] ambientColor = { 0.1f, 0.1f, 0.0f, 1.0f };
-            float[] diffuseColor = { 0.97f, 0.98f, 0.61f, 1.0f }; //tackasti izvor svetlo-zute boje
+            float[] diffuseColor = { 0.97f, 0.98f, 0.61f, 1.0f }; //tackasti izvor svetlo-zute boje (2)
 
             gl.Light(OpenGL.GL_LIGHT0, OpenGL.GL_AMBIENT, ambientColor);
             gl.Light(OpenGL.GL_LIGHT0, OpenGL.GL_DIFFUSE, diffuseColor);
 
-            //specijalni slucaj reflektorskog izvora
+            //specijalni slucaj reflektorskog izvora (2)
             gl.Light(OpenGL.GL_LIGHT0, OpenGL.GL_SPOT_CUTOFF, 180.0f); //tackasti izvor -> cutoff = 180 stepeni
 
             gl.Enable(OpenGL.GL_LIGHT0);
 
-            //gore levo u odnosu na centar scene
+            //gore levo u odnosu na centar scene (2)
             float[] lightPosition = { -10.0f, 6.0f, -26.0f, 1.0f };
 
             gl.Light(OpenGL.GL_LIGHT0, OpenGL.GL_POSITION, lightPosition);
@@ -443,7 +493,7 @@ namespace PF1S2._1
         public void SetupReflektorskoSvetlo(OpenGL gl)
         {
             float[] ambientColor = { m_ambientRed, m_ambientGreen, m_ambientBlue, 1.0f };
-            float[] diffuseColor = { 1.0f, 1.0f, 1.0f, 1.0f }; //reflektorski izvor bele boje
+            float[] diffuseColor = { 1.0f, 1.0f, 1.0f, 1.0f }; //reflektorski izvor bele boje (9)
 
             float[] direction = { 0.0f, -1.0f, 0.0f }; //smer ka dole 
 
@@ -451,22 +501,27 @@ namespace PF1S2._1
             gl.Light(OpenGL.GL_LIGHT1, OpenGL.GL_DIFFUSE, diffuseColor);
 
             gl.Light(OpenGL.GL_LIGHT1, OpenGL.GL_SPOT_DIRECTION, direction); //smer svetla
-            gl.Light(OpenGL.GL_LIGHT1, OpenGL.GL_SPOT_CUTOFF, 45.0f); //reflektorsko svetlo, cutoff = 45 stepeni
+            gl.Light(OpenGL.GL_LIGHT1, OpenGL.GL_SPOT_CUTOFF, 45.0f); //reflektorsko svetlo, cutoff = 45 stepeni (9)
 
             gl.Enable(OpenGL.GL_LIGHT1);
 
             //iznad automobila
-            float[] lightPosition = { 0.0f, 6.0f, -14.0f, 1.0f };
+            float[] lightPosition = { 0.0f, 6.0f, m_lightTranslate, 1.0f };
 
             gl.Light(OpenGL.GL_LIGHT1, OpenGL.GL_POSITION, lightPosition);
 
         }
 
-        public void ChangeAmbientLightning(OpenGL gl)
+        public void UpdateReflektorskoSvetlo(OpenGL gl)
         {
             float[] ambientColor = { m_ambientRed, m_ambientGreen, m_ambientBlue, 1.0f};
+            float[] direction = { 0.0f, -1.0f, 0.0f }; //smer ka dole 
+            float[] lightPosition = { 0.0f, 6.0f, m_lightTranslate, 1.0f };
 
             gl.Light(OpenGL.GL_LIGHT1, OpenGL.GL_AMBIENT, ambientColor);
+            gl.Light(OpenGL.GL_LIGHT1, OpenGL.GL_SPOT_DIRECTION, direction); //smer svetla
+            gl.Light(OpenGL.GL_LIGHT1, OpenGL.GL_POSITION, lightPosition);
+
         }
 
         #endregion
