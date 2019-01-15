@@ -349,7 +349,7 @@ namespace PF1S2._1
 
         public void DrawFormula1(OpenGL gl)
         {
-            gl.Enable(OpenGL.GL_TEXTURE_3D);
+            gl.Enable(OpenGL.GL_TEXTURE_2D);
             gl.TexEnv(OpenGL.GL_TEXTURE_ENV, OpenGL.GL_TEXTURE_ENV_MODE, OpenGL.GL_MODULATE); //način stapanja teksture sa materijalom (10)
             
             //desna formula
@@ -363,12 +363,12 @@ namespace PF1S2._1
             gl.PopMatrix();
 
             gl.TexEnv(OpenGL.GL_TEXTURE_ENV, OpenGL.GL_TEXTURE_ENV_MODE, OpenGL.GL_DECAL); //način stapanja teksture sa materijalom
-            gl.Disable(OpenGL.GL_TEXTURE_3D);
+            gl.Disable(OpenGL.GL_TEXTURE_2D);
         }
 
         public void DrawFormula2(OpenGL gl)
         {
-            gl.Enable(OpenGL.GL_TEXTURE_3D);
+            gl.Enable(OpenGL.GL_TEXTURE_2D);
             gl.TexEnv(OpenGL.GL_TEXTURE_ENV, OpenGL.GL_TEXTURE_ENV_MODE, OpenGL.GL_MODULATE); //način stapanja teksture sa materijalom (10)
 
             //leva formula
@@ -382,7 +382,7 @@ namespace PF1S2._1
             gl.PopMatrix();
 
             gl.TexEnv(OpenGL.GL_TEXTURE_ENV, OpenGL.GL_TEXTURE_ENV_MODE, OpenGL.GL_DECAL); //način stapanja teksture sa materijalom
-            gl.Disable(OpenGL.GL_TEXTURE_3D);
+            gl.Disable(OpenGL.GL_TEXTURE_2D);
         }
 
         public void DrawText(OpenGL gl)
