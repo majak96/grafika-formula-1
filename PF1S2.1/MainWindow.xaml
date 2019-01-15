@@ -16,39 +16,39 @@
                     <DockPanel VerticalAlignment="Center" Margin="5">
                         <Label DockPanel.Dock="Left" FontWeight="Bold">R:</Label>
                         <TextBox Text="{Binding ElementName=slColorR, Path=Value, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Right" TextAlignment="Right" Width="40" />
-                        <Slider Maximum="1" TickPlacement="BottomRight" TickFrequency="0.1" IsSnapToTickEnabled="True" Name="slColorR" ValueChanged="ColorSlider_ValueChanged" />
+                        <Slider IsEnabled="{Binding AnimationNotOn}" Maximum="1" TickPlacement="BottomRight" TickFrequency="0.1" IsSnapToTickEnabled="True" Name="slColorR" ValueChanged="ColorSlider_ValueChanged" />
                     </DockPanel>
 
                     <DockPanel VerticalAlignment="Center" Margin="5">
                         <Label DockPanel.Dock="Left" FontWeight="Bold">G:</Label>
                         <TextBox Text="{Binding ElementName=slColorG, Path=Value, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Right" TextAlignment="Right" Width="40" />
-                        <Slider Maximum="1" TickPlacement="BottomRight" TickFrequency="0.1" IsSnapToTickEnabled="True" Name="slColorG" ValueChanged="ColorSlider_ValueChanged" />
+                        <Slider IsEnabled="{Binding AnimationNotOn}" Maximum="1" TickPlacement="BottomRight" TickFrequency="0.1" IsSnapToTickEnabled="True" Name="slColorG" ValueChanged="ColorSlider_ValueChanged" />
                     </DockPanel>
 
                     <DockPanel VerticalAlignment="Center" Margin="5">
                         <Label DockPanel.Dock="Left" FontWeight="Bold">B:</Label>
                         <TextBox Text="{Binding ElementName=slColorB, Path=Value, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Right" TextAlignment="Right" Width="40" />
-                        <Slider Maximum="1" TickPlacement="BottomRight" TickFrequency="0.1" IsSnapToTickEnabled="True" Name="slColorB" ValueChanged="ColorSlider_ValueChanged" />
+                        <Slider IsEnabled="{Binding AnimationNotOn}" Maximum="1" TickPlacement="BottomRight" TickFrequency="0.1" IsSnapToTickEnabled="True" Name="slColorB" ValueChanged="ColorSlider_ValueChanged" />
                     </DockPanel>
                 </StackPanel>
                 <StackPanel Margin="5" VerticalAlignment="Center" >
                     <Label Content="Transliranje desnog bolida"></Label>
                     <DockPanel VerticalAlignment="Center" Margin="5">
                         <TextBox Text="{Binding ElementName=translate, Path=Value, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Right" TextAlignment="Right" Width="40" />
-                        <Slider Maximum="3.9" Minimum="1.4" Value="2.2" TickPlacement="BottomRight" TickFrequency="0.1" IsSnapToTickEnabled="True" Name="translate" ValueChanged="TranslationSlider_ValueChanged" />
+                        <Slider IsEnabled="{Binding AnimationNotOn}" Maximum="3.9" Minimum="1.4" Value="2.2" TickPlacement="BottomRight" TickFrequency="0.1" IsSnapToTickEnabled="True" Name="translate" ValueChanged="TranslationSlider_ValueChanged" />
                     </DockPanel>
                 </StackPanel>
                 <StackPanel Margin="5" VerticalAlignment="Center" >
                     <Label Content="Rotiranje levog bolida"></Label>
                     <DockPanel VerticalAlignment="Center" Margin="5">
                         <TextBox Text="{Binding ElementName=rotate, Path=Value, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Right" TextAlignment="Right" Width="40" />
-                        <Slider Maximum="360" Minimum="0" Value="270" TickPlacement="BottomRight" TickFrequency="5.0" IsSnapToTickEnabled="True" Name="rotate" ValueChanged="RotationSlider_ValueChanged" />
+                        <Slider IsEnabled="{Binding AnimationNotOn}" Maximum="360" Minimum="0" Value="270" TickPlacement="BottomRight" TickFrequency="5.0" IsSnapToTickEnabled="True" Name="rotate" ValueChanged="RotationSlider_ValueChanged" />
                     </DockPanel>
                 </StackPanel>
 
                 <StackPanel Margin="5" VerticalAlignment="Center">
                     <DockPanel VerticalAlignment="Center" Margin="5">
-                        <Button Click="ButtonClick_Refresh" Content="Osveži scenu"></Button>
+                        <Button IsEnabled="{Binding AnimationNotOn}" Click="ButtonClick_Refresh" Content="Osveži scenu"></Button>
                     </DockPanel>
                 </StackPanel>
             </StackPanel>

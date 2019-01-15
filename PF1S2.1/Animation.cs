@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,22 +8,32 @@ using System.Windows.Threading;
 
 namespace PF1S2._1
 {
-    class Animation
+    class Animation : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
 
         private World m_world = null;
         private DispatcherTimer leftCarTimer;
         private DispatcherTimer rightCarTimer;
         private DispatcherTimer cameraTimer;
 
-        private bool animationOn = false;
+        private bool animationNotOn = true;
 
         public Animation(World world)
         {
             m_world = world;
         }
 
-        public bool AnimationOn { get => animationOn; set => animationOn = value; }
+        public bool AnimationNotOn {
+            get
+            {
+                return animationNotOn;
+            }
+            set {
+                animationNotOn = value;
+                  OnPropertyChanged("AnimationNotOn");
+            }
+        }
 
         public void LeftCarAnimation(object sender, EventArgs e)
         {
@@ -31,6 +42,7 @@ namespace PF1S2._1
             if (m_world.LeftTranslateZ <= -30.0f)
             {
                 leftCarTimer.Stop();
+                m_world.LeftTranslateZ -= 0.35f;
                 //animation = false;
             }
         }
@@ -42,7 +54,7 @@ namespace PF1S2._1
             {
                 rightCarTimer.Stop();
                 cameraTimer.Stop();
-                animationOn = false;
+                AnimationNotOn = true;
             }
        
         }
@@ -63,7 +75,7 @@ namespace PF1S2._1
         {
             m_world.RefreshScene();
 
-        animationOn = true;
+            AnimationNotOn = false;
             leftCarTimer = new DispatcherTimer();
             leftCarTimer.Interval = TimeSpan.FromMilliseconds(5);
             leftCarTimer.Tick += new EventHandler(LeftCarAnimation);
@@ -79,6 +91,15 @@ namespace PF1S2._1
             leftCarTimer.Start();
             rightCarTimer.Start();
             cameraTimer.Start();
+        }
+
+        protected void OnPropertyChanged(string name)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(name));
+            }
         }
     }
 }

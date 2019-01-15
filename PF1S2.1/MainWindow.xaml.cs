@@ -39,6 +39,7 @@ namespace PF1S2._1
                                     "rio.obj", "Car_Obj.obj", (int)openGLControl.Width, (int)openGLControl.Height, openGLControl.OpenGL);
 
                 animation = new Animation(m_world);
+                DataContext = animation;
             }
             catch (Exception)
             {
@@ -65,7 +66,7 @@ namespace PF1S2._1
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
-            if (!animation.AnimationOn)
+            if (animation.AnimationNotOn)
             {
                 switch (e.Key)
                 {
@@ -95,7 +96,7 @@ namespace PF1S2._1
         private void ColorSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             //izbor boje ambijentalne komponente reflektorskog svetlosnog izvora (7)
-            if (m_world != null &&  !animation.AnimationOn)
+            if (m_world != null &&  animation.AnimationNotOn)
             {
                 m_world.AmbientRed = (float)slColorR.Value;
                 m_world.AmbientGreen = (float)slColorG.Value;
@@ -107,7 +108,7 @@ namespace PF1S2._1
         private void TranslationSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             //transliranje desnog bolida po hoorizontalnoj osi (7)
-            if (m_world != null && !animation.AnimationOn)
+            if (m_world != null && animation.AnimationNotOn)
             {
                 m_world.RightTranslateX = (float)translate.Value;
             }
@@ -116,7 +117,7 @@ namespace PF1S2._1
         private void RotationSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             //rotiranje levog bolida oko vertikalne ose (7)
-            if (m_world != null && !animation.AnimationOn)
+            if (m_world != null && animation.AnimationNotOn)
             {
                 m_world.LeftRotateY = (float)rotate.Value;
             }
@@ -124,7 +125,7 @@ namespace PF1S2._1
 
         private void ButtonClick_Refresh(object sender, RoutedEventArgs e)
         {
-            if (m_world != null && !animation.AnimationOn)
+            if (m_world != null && animation.AnimationNotOn)
             {
                 m_world.RefreshScene();
             }
