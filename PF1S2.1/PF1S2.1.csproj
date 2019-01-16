@@ -100,8 +100,12 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Resource Include="Textures\gravel.jpg" />
-    <Resource Include="Textures\metal.jpg" />
+    <Resource Include="Textures\gravel.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Textures\metal.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Textures\asfalt.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
